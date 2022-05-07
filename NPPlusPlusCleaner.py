@@ -2,12 +2,12 @@ import os
 import time
 
 def printlist(li):
-	for a in li:
-		print(a)
+	for line in li:
+		print(line)
 
 def main():
 	
-	#such that duplicates are avoided
+	#.txt file where already iterated files are listed
 	#fill
 	nplistfileobjlocation = r''
 	nplistfileobj = open(nplistfileobjlocation, 'a+')
@@ -34,6 +34,7 @@ def main():
 	
 	# printlist(FileNamesSortedByCreationOrModifiedDate)
 	
+	#.txt file where the text content is dumped
 	#fill
 	dumpfileobjlocation = r''
 	
@@ -41,8 +42,9 @@ def main():
 	
 	for f in FileNamesSortedByCreationOrModifiedDate:
 		
+		#anything that doesn't start with "new <number>" is a backup of an existing file being edited
 		if not f.find("new ") == 0:
-			print('skipping "' + f + '" (' + str(f.find("new ")) + ')')
+			print("skipping " + f)
 			continue
 		
 		fullfilepath = os.path.join(filelistdirectory, f)
@@ -52,7 +54,6 @@ def main():
 		
 		#name
 		dumpfileobj.write('\n\n---{}---\n\n'.format(f).encode("UTF-8"))
-		# dumpfileobj.write('\n//{}\n//{}\n\n\n'.format(str(time.ctime(os.path.getctime(f))) , str(time.ctime(os.path.getmtime(f)))).encode("UTF-8"))
 		
 		cretime = str(time.ctime(os.path.getctime(fullfilepath)))
 		modtime = str(time.ctime(os.path.getmtime(fullfilepath)))
