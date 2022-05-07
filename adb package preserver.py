@@ -7,6 +7,15 @@ import shutil
 #fill
 adbpath = r""
 
+adbpath = [pathvarline for pathvarline in os.environ["path"].split(";") if 'adb.exe' in pathvarline or os.path.join("Android", "Sdk", "platform-tools") in pathvarline]
+
+if not len(adbpath) or not os.path.exists(adbpath[0]):
+	raise Exception("invalid adb path")
+
+adbpath = adbpath[0]
+
+print(adbpath)
+
 
 def printlist(li):
 	for line in li:
@@ -85,4 +94,4 @@ def main():
 
 if __name__ == "__main__":
 	main()
-	dummyinput = input("Press any key to continue...")
+	dummyinput = input("Press enter to continue...")
