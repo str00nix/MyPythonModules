@@ -4,7 +4,7 @@ import shutil
 
 
 #example: r"C:\Users\<usename>\AppData\Local\Android\Sdk\platform-tools\adb.exe"
-#fill
+#fill if adb path is not specified
 adbpath = r""
 
 adbpathlist = [pathvarline for pathvarline in os.environ["path"].split(";") if 'adb.exe' in pathvarline or os.path.join("Android", "Sdk", "platform-tools") in pathvarline]
@@ -45,22 +45,18 @@ def pullAllPackages(packagelocationlist, initialdownloadpath, movingdownloadpath
 	for packagelocation in packagelocationlist:
 		
 		try:
-			newname = packagelocation.strip("/").replace("/","--")
-			
 			result = subprocess.run([adbpath, "pull", packagelocation, initialdownloadpath], stdout = subprocess.PIPE, stderr = subprocess.STDOUT)
+			
 			print(result.stdout)
 			
-			#get first (and only) file in initialdownloadpath
+			oldname = packagelocation[packagelocation.rindex('/')+1:]
 			
-			oldname = ''
-			filenames = os.listdir(initialdownloadpath)
-			
-			if filenames:
-				oldname = filenames[0]
-				newname = newname if 'base.apk' in oldname else oldname
-				shutil.move(os.path.join(initialdownloadpath, oldname), os.path.join(movingdownloadpath,newname))
+			if 'base.apk' in oldname:
+				newname = packagelocation.strip("/").replace("/","--")
 			else:
-				print('no "oldname" ({})'.format(packagelocation))
+				newname = oldname
+			
+			shutil.move(os.path.join(initialdownloadpath, oldname), os.path.join(movingdownloadpath,newname))
 			
 		except Exception as e:
 			print(getattr(e, 'message', repr(e)))
@@ -83,10 +79,13 @@ def main():
 		initialtransferfolder = input("Folder path where packages are pulled:")
 	
 	
-	#fill
-	finaltransferfolder = r""
-	while not os.path.exists(finaltransferfolder) or not os.path.isdir(finaltransferfolder):
-		finaltransferfolder = input("Folder path where packages are transfered after pulling:")
+	finaltransferfolder = os.path.join(initialtransferfolder, "FinalDestination")
+	if not os.path.isdir(finaltransferfolder):
+		try:
+			os.mkdir(finaltransferfolder)
+		except OSError:
+			if not os.path.isdir(finaltransferfolder):
+				raise
 	
 	print()
 	
