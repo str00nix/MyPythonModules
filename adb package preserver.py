@@ -7,12 +7,13 @@ import shutil
 #fill
 adbpath = r""
 
-adbpath = [pathvarline for pathvarline in os.environ["path"].split(";") if 'adb.exe' in pathvarline or os.path.join("Android", "Sdk", "platform-tools") in pathvarline]
+adbpathlist = [pathvarline for pathvarline in os.environ["path"].split(";") if 'adb.exe' in pathvarline or os.path.join("Android", "Sdk", "platform-tools") in pathvarline]
 
-if not len(adbpath) or not os.path.exists(adbpath[0]):
+if not adbpath and (not len(adbpathlist) or not os.path.exists(adbpathlist[0])):
 	raise Exception("invalid adb path")
 
-adbpath = adbpath[0]
+if not adbpath:
+	adbpath = adbpathlist[0]
 
 print(adbpath)
 
