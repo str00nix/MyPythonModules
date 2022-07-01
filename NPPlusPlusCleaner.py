@@ -28,7 +28,7 @@ def main():
 		key=lambda f:
 			os.path.getctime(os.path.join(filelistdirectory, f))
 			if
-				time.ctime(os.path.getctime(os.path.join(filelistdirectory, f))) > time.ctime(os.path.getmtime(os.path.join(filelistdirectory, f)))
+				os.path.getctime(os.path.join(filelistdirectory, f)) > os.path.getmtime(os.path.join(filelistdirectory, f))
 			else
 				os.path.getmtime(os.path.join(filelistdirectory, f)))
 	
