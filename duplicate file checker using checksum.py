@@ -15,10 +15,11 @@ def main():
 	while not os.path.exists(rootpath) or not os.path.isdir(rootpath):
 		print("invalid input file path ({})".format(rootpath))
 		rootpath = input("path: ").rstrip('"').strip('"')
+		if rootpath == "exit":
+			return
 	
-
+	
 	arr = []
-	
 	
 	for path, subdirs, files in os.walk(rootpath):
 	
