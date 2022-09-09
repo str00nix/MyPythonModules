@@ -27,14 +27,10 @@ def main():
 			
 			filepath = os.path.join(path, name)
 			
-			binaryFileContent = open(filepath, 'rb').read()
-			
 			arr.append({
 				"filepath":filepath,
-				"sha256":hashlib.sha256(binaryFileContent).hexdigest(),
+				"sha256":hashlib.sha256(open(filepath, 'rb').read()).hexdigest(),
 			})
-			
-			binaryFileContent = b''
 	
 	
 	countedresult = Counter([a["sha256"] for a in arr])
